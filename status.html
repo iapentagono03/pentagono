@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Status Report Completo — Pentágono Engenharia | PavScan / Zeladoria</title>
+  <style>
+    :root{
+      --penta:#f3901d;
+      --bg:#0b0f14;
+      --panel:#0f1621;
+      --card:#111b28;
+      --card2:#0e1724;
+      --text:#e8eef6;
+      --muted:#a9b4c2;
+      --line:#223042;
+      --good:#2ecc71;
+      --warn:#f1c40f;
+      --bad:#e74c3c;
+      --info:#4aa3ff;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(243,144,29,.18), transparent 55%),
+        radial-gradient(900px 600px at 100% 15%, rgba(74,163,255,.12), transparent 55%),
+        linear-gradient(180deg, #06090d 0%, var(--bg) 55%, #05070a 100%);
+      color:var(--text);
+      line-height:1.48;
+    }
+
+    .container{
+      max-width:1180px;
+      margin:0 auto;
+      padding:26px 18px 56px;
+    }
+
+    .header{
+      background: linear-gradient(135deg, rgba(243,144,29,.18), rgba(17,27,40,.65));
+      border:1px solid rgba(243,144,29,.25);
+      border-radius: var(--radius);
+      padding:22px 22px 18px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .header:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(600px 220px at 15% 0%, rgba(243,144,29,.22), transparent 60%);
+      pointer-events:none;
+    }
+
+    .toprow{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:1;
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      min-width:280px;
+    }
+
+    .logo{
+      width:48px;height:48px;
+      border-radius:14px;
+      background: linear-gradient(135deg, rgba(243,144,29,1), rgba(243,144,29,.35));
+      box-shadow: 0 8px 22px rgba(243,144,29,.25);
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      flex:0 0 auto;
+    }
+    .logo svg{opacity:.95}
+
+    .titleblock h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .titleblock p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .meta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:flex-start;
+      margin-left:auto;
+    }
+
+    .pill{
+      background: rgba(15,22,33,.7);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 999px;
+      padding:8px 12px;
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      box-shadow: 0 8px 18px rgba(0,0,0,.18);
+    }
+    .pill b{color:var(--text); font-weight:600}
+
+    .dot{
+      width:9px;height:9px;border-radius:50%;
+      background: var(--good);
+      box-shadow: 0 0 0 4px rgba(46,204,113,.12);
+      flex:0 0 auto;
+    }
+    .dot.warn{ background:var(--warn); box-shadow:0 0 0 4px rgba(241,196,15,.12); }
+    .dot.bad{ background:var(--bad); box-shadow:0 0 0 4px rgba(231,76,60,.12); }
+
+    .btnprint{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(15,22,33,.6);
+      color: var(--text);
+      border-radius: 999px;
+      padding:10px 12px;
+      font-size:12px;
+      cursor:pointer;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .btnprint:hover{ border-color: rgba(243,144,29,.35); }
+
+    .subtitle{
+      margin:16px 0 0;
+      color:var(--muted);
+      position:relative;
+      z-index:1;
+      font-size:13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .meta{ justify-content:flex-start; }
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(17,27,40,.95), rgba(14,23,36,.92));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:18px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .card h3{
+      margin:18px 0 10px;
+      font-size:14px;
+      letter-spacing:.2px;
+      color: var(--text);
+    }
+    .muted{
+      color:var(--muted);
+      font-size:13px;
+      margin:0;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      padding:7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(11,15,20,.35);
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .badge b{color:var(--text)}
+    .badge.green{ border-color: rgba(46,204,113,.30); background: rgba(46,204,113,.10); }
+    .badge.yellow{ border-color: rgba(241,196,15,.30); background: rgba(241,196,15,.10); }
+    .badge.red{ border-color: rgba(231,76,60,.30); background: rgba(231,76,60,.10); }
+    .badge.blue{ border-color: rgba(74,163,255,.30); background: rgba(74,163,255,.10); }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 600px){
+      .kpis{ grid-template-columns: 1fr; }
+    }
+
+    .kpi{
+      background: rgba(6,9,13,.45);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius2);
+      padding:12px;
+    }
+    .kpi .label{
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:6px;
+    }
+    .kpi .value{
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.2px;
+      color:var(--text);
+    }
+
+    .section{
+      margin-top:14px;
+      padding-top:14px;
+      border-top: 1px dashed rgba(255,255,255,.12);
+    }
+
+    .list{
+      margin:8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size:13px;
+    }
+    .list li{ margin:6px 0; }
+    .list li b{ color: var(--text); font-weight:600; }
+
+    .callout{
+      margin-top:12px;
+      padding:12px 12px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(243,144,29,.28);
+      background: linear-gradient(180deg, rgba(243,144,29,.12), rgba(15,22,33,.35));
+      color: var(--text);
+      font-size:13px;
+    }
+    .callout .small{
+      color: var(--muted);
+      margin-top:6px;
+      font-size:12px;
+    }
+
+    .tablewrap{
+      overflow:auto;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(6,9,13,.35);
+      margin-top:10px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width: 860px;
+    }
+    th, td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      text-align:left;
+      font-size:12.5px;
+      color: var(--muted);
+      vertical-align: top;
+    }
+    th{
+      position:sticky;
+      top:0;
+      background: rgba(17,27,40,.95);
+      color: var(--text);
+      font-weight:700;
+      letter-spacing:.2px;
+      z-index:1;
+    }
+    td b{ color: var(--text); }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(15,22,33,.55);
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .tag.orange{ border-color: rgba(243,144,29,.25); background: rgba(243,144,29,.10); }
+    .tag.green{ border-color: rgba(46,204,113,.25); background: rgba(46,204,113,.10); }
+    .tag.yellow{ border-color: rgba(241,196,15,.25); background: rgba(241,196,15,.10); }
+    .tag.red{ border-color: rgba(231,76,60,.25); background: rgba(231,76,60,.10); }
+    .tag.blue{ border-color: rgba(74,163,255,.25); background: rgba(74,163,255,.10); }
+
+    .hr{
+      margin:14px 0 0;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(243,144,29,.35), rgba(255,255,255,.10), transparent);
+    }
+
+    .footer{
+      margin-top:16px;
+      color: var(--muted);
+      font-size:12px;
+      opacity:.95;
+    }
+
+    .signature{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .sig{
+      font-size:12px;
+      color: var(--muted);
+    }
+    .sig b{ color: var(--text); }
+
+    @media print{
+      body{ background:#fff; color:#111; }
+      .header,.card{ box-shadow:none; }
+      .btnprint{ display:none; }
+      .container{ max-width:none; padding:0; }
+      .card{ border:1px solid #ddd; }
+      .badge,.tag{ border:1px solid #ddd; background:#f7f7f7; color:#333; }
+      .muted,.sig,td,th{ color:#333; }
+      .logo{ box-shadow:none; }
+      .tablewrap{ border:1px solid #ddd; }
+      th{ background:#f2f2f2; color:#111; }
+      .callout{ background:#fff7ef; border-color:#f3901d; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <section class="header">
+      <div class="toprow">
+        <div class="brand">
+          <div class="logo" aria-label="Pentágono">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2.5l8.5 6.2-3.3 10.1H6.8L3.5 8.7 12 2.5z" stroke="white" stroke-width="1.6" opacity="0.95"/>
+              <path d="M12 6.2l4.8 3.5-1.9 5.8H9.1L7.2 9.7 12 6.2z" fill="white" opacity="0.18"/>
+            </svg>
+          </div>
+          <div class="titleblock">
+            <h1>📊 Status Report Completo — Projeto Visão Computacional</h1>
+            <p><b>Pentágono Engenharia</b> • PavScan / Zeladoria Urbana • Documento técnico-executivo</p>
+          </div>
+        </div>
+
+        <div class="meta">
+          <span class="pill"><span class="dot"></span><b>Status:</b> 🟢 Evolução consistente</span>
+          <span class="pill"><b>Responsável:</b> Milena Castilho</span>
+          <span class="pill"><b>Período:</b> Ciclo atual (Jan/2026)</span>
+          <button class="btnprint" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
+        </div>
+      </div>
+
+      <p class="subtitle">
+        Relatório consolidado com <b>todas as entregas do ciclo</b> (arquitetura de modelos, governança PMO,
+        scripts, auditorias, validações e organização operacional), com foco em
+        <b>robustez em produção</b>, <b>qualidade do dataset</b> e <b>escalabilidade</b>.
+      </p>
+    </section>
+
+    <!-- TOP GRID -->
+    <div class="grid">
+
+      <!-- RESUMO EXECUTIVO -->
+      <section class="card">
+        <h2>🧭 Resumo Executivo <span class="badge green"><b>STATUS</b> 🟢 Controle + evolução</span></h2>
+        <p class="muted">
+          Neste ciclo, o trabalho foi direcionado para <b>separação de domínios (Zeladoria × Pavimento)</b>,
+          <b>padronização de rotulagem</b>, <b>automação de auditorias</b>, <b>validação prática (imagem/vídeo)</b>
+          e <b>governança técnica (Agente PMO)</b>. As entregas foram estruturadas para permitir escala do projeto
+          com segurança, inclusive com operação assistida por estagiário via Roboflow.
+        </p>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label">Arquitetura</div>
+            <div class="value">Modelos separados por domínio</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Governança</div>
+            <div class="value">Agente de PMO técnico</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Qualidade do dado</div>
+            <div class="value">Auditoria + guia de rotulagem</div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <b>Regra de ouro aplicada ao dataset:</b>
+          “Se não está claro para você que aquilo é uma classe, <b>não rotule</b>.”
+          <div class="small">
+            Motivo: rótulos ambíguos viram ruído → aumentam falso positivo e reduzem generalização do modelo.
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>🎯 Objetivos técnicos do ciclo</h3>
+          <ul class="list">
+            <li><b>Separar modelos</b> para reduzir confusão semântica e facilitar tuning.</li>
+            <li><b>Padronizar rotulagem</b> para reduzir variância entre anotadores.</li>
+            <li><b>Auditar dataset</b> e localizar possíveis <b>falsos negativos de anotação</b>.</li>
+            <li><b>Validar em lote</b> (imagens e vídeos) para inspeção rápida e evidências.</li>
+            <li><b>Organizar Roboflow</b> para operação segura por estagiário.</li>
+            <li><b>Documentar decisões</b> com governança via PMO técnico.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- STATUS + RISCO -->
+      <section class="card">
+        <h2>📌 Status Geral do Projeto</h2>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+          <span class="badge green"><b>Progresso</b> consistente</span>
+          <span class="badge yellow"><b>Riscos</b> mitigáveis via dataset</span>
+          <span class="badge blue"><b>Foco</b> robustez em produção</span>
+        </div>
+
+        <div class="section">
+          <h3>✅ Consolidado no ciclo</h3>
+          <ul class="list">
+            <li>Arquitetura com <b>modelos separados</b>: Zeladoria Urbana e Pavimento.</li>
+            <li><b>Agente PMO</b> criado para governança do ciclo (treino → validação → decisão).</li>
+            <li>Guia de rotulagem em HTML com <b>critérios claros</b> e boas práticas.</li>
+            <li>Scripts para <b>auditar dataset</b> e acelerar validação por imagens/vídeos.</li>
+            <li>Script para <b>separar classes do dataset</b> e gerar datasets por domínio.</li>
+            <li>Organização do Roboflow para <b>uso seguro por estagiário</b>.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>⚠️ Pontos de atenção atuais</h3>
+          <ul class="list">
+            <li><b>PV × roda de caminhão</b> em alguns casos (padrões circulares/texturas).</li>
+            <li><b>Remendo × sombra de árvore</b> dependendo do contraste e hora do dia.</li>
+            <li><b>PV × pintura de solo</b> (geralmente baixa confiança ~0.4).</li>
+            <li>Necessidade de <b>mais imagens de buracos com água</b> (cenário crítico).</li>
+          </ul>
+          <div class="callout">
+            <b>Leitura técnica:</b> são falhas típicas de lacuna de dataset (variação de cenário), não estrutural do modelo.
+            Mitigação: reforço de dados direcionado + hard negatives.
+          </div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="signature">
+          <div class="sig"><b>Milena Castilho</b> • Responsável Técnica (Dataset / Treino / Validação)</div>
+          <div class="sig">Versão: <b>1.0</b> • Documento: <b>Status Report Completo</b></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ARQUITETURA DE MODELOS -->
+    <section class="card" style="margin-top:14px;">
+      <h2>🏗️ Arquitetura — Separação de Modelos (Zeladoria × Pavimento)</h2>
+      <p class="muted">
+        Foi estruturada a separação entre domínios para reduzir ruído, melhorar especialização e facilitar manutenção.
+        Em vez de um “modelo único”, o projeto passa a operar com modelos independentes por contexto.
+      </p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+        <span class="tag green">Especialização</span>
+        <span class="tag blue">Manutenibilidade</span>
+        <span class="tag orange">Escalabilidade</span>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:16%;">Modelo</th>
+              <th style="width:30%;">Escopo</th>
+              <th style="width:34%;">Por que separar</th>
+              <th style="width:20%;">Resultado esperado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Zeladoria Urbana</b></td>
+              <td>Interferências urbanas e ocupações indevidas (ex.: carro em cima da calçada; fiação com arbusto; obstruções)</td>
+              <td>Classes de objeto/contexto urbano competem com padrões de textura do pavimento; separar reduz confusão semântica.</td>
+              <td>Modelo mais “contextual” e preciso em cenários urbanos.</td>
+            </tr>
+            <tr>
+              <td><b>Pavimento</b></td>
+              <td>Defeitos do pavimento (ex.: buraco, trinca, remendo, PV e variações)</td>
+              <td>Domínio altamente dependente de textura, luz e geometria; manter puro melhora generalização e tuning.</td>
+              <td>Mais precisão/recall em campo com ajustes finos por cenário.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <b>Benefício prático:</b> cada modelo evolui com seu dataset, métricas e regras de rotulagem específicas,
+        reduzindo retrabalho e aumentando a previsibilidade das melhorias.
+      </div>
+    </section>
+
+    <!-- AGENTE PMO -->
+    <section class="card">
+      <h2>📊 Agente de PMO Técnico — Governança do Ciclo de ML</h2>
+      <p class="muted">
+        Foi criado um agente de PMO técnico para organizar e padronizar o ciclo:
+        <b>coleta/rotulagem → dataset → treino → validação → decisão → próximo passo</b>.
+        O agente atua como “camada de gestão” para reduzir subjetividade e garantir rastreabilidade.
+      </p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+        <span class="tag blue">Governança</span>
+        <span class="tag green">Rastreabilidade</span>
+        <span class="tag orange">Padronização</span>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:22%;">Responsabilidade</th>
+              <th style="width:40%;">O que faz</th>
+              <th style="width:38%;">Saída / Evidência</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Controle de versões</b></td>
+              <td>Registra dataset usado, data, parâmetros de treino, pesos gerados e alterações do ciclo.</td>
+              <td>Histórico versionado (treino → peso → evidência) para auditoria e comparação.</td>
+            </tr>
+            <tr>
+              <td><b>Checklist de qualidade</b></td>
+              <td>Garante que treinos não ocorram sem critérios mínimos (classes, consistência, amostragem adversa).</td>
+              <td>Checklist preenchido + recomendações de correção.</td>
+            </tr>
+            <tr>
+              <td><b>Relatórios</b></td>
+              <td>Gera status report executivo e técnico (diagnóstico, risco, recomendação, próximos passos).</td>
+              <td>Relatórios padronizados no padrão Pentágono.</td>
+            </tr>
+            <tr>
+              <td><b>Gestão do backlog</b></td>
+              <td>Transforma achados (ex.: PV×pintura) em ações objetivas (hard negatives, coletas específicas).</td>
+              <td>Backlog de ações e prioridades por impacto.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <b>Impacto:</b> reduz retrabalho, melhora comunicação com stakeholders e acelera evolução com decisões orientadas por evidência.
+      </div>
+    </section>
+
+    <!-- GUIA DE ROTULAGEM -->
+    <section class="card">
+      <h2>📘 Guia de Rotulagem — Padrão Pentágono (Critérios e Boas Práticas)</h2>
+      <p class="muted">
+        Foi estruturado um guia de rotulagem em HTML para padronizar a anotação e maximizar desempenho do modelo.
+        O guia reforça decisões importantes para evitar ruído no dataset.
+      </p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+        <span class="tag green">Consistência</span>
+        <span class="tag orange">Qualidade do dado</span>
+        <span class="tag blue">Performance do modelo</span>
+      </div>
+
+      <div class="section">
+        <h3>Regras críticas incorporadas</h3>
+        <ul class="list">
+          <li><b>Regra anti-ruído:</b> se não está claro para você que aquilo é a classe, <b>não rotule</b>.</li>
+          <li><b>Fiação:</b> rotular quando o <b>arbusto encosta</b> (interferência real).</li>
+          <li><b>Carro:</b> rotular quando o veículo está <b>em cima da calçada</b>.</li>
+          <li><b>Bounding box:</b> manter caixa justa, sem “sobrar chão” excessivo.</li>
+          <li><b>Ocultação:</b> se a evidência principal estiver oculta, evitar rotular.</li>
+        </ul>
+
+        <div class="callout">
+          <b>Por que isso melhora o modelo:</b>
+          rótulos consistentes ensinam limites corretos de classe, reduzem falso positivo e aumentam estabilidade em produção.
+        </div>
+      </div>
+    </section>
+
+    <!-- SCRIPTS -->
+    <section class="card">
+      <h2>🧩 Scripts Desenvolvidos — Inventário Completo (o que cada um faz)</h2>
+      <p class="muted">
+        Abaixo, a lista consolidada dos scripts/rotinas entregues no ciclo. (Os nomes podem ser ajustados para os nomes reais do seu repositório.)
+      </p>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:20%;">Script / Rotina</th>
+              <th style="width:35%;">Descrição (o que faz)</th>
+              <th style="width:25%;">Entradas</th>
+              <th style="width:20%;">Saídas / Uso</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Auditoria de Falso Negativo</b><br><span class="tag blue">dataset_audit_fn.py (ajustar)</span></td>
+              <td>
+                Executa inferência no dataset (ex.: train/val) e identifica imagens onde o modelo detecta objetos
+                que <b>não estavam rotulados</b> (suspeita de falso negativo de anotação). Produz lista para revisão.
+              </td>
+              <td>
+                Pasta de imagens + labels (YOLO) + peso do modelo + conf threshold.
+              </td>
+              <td>
+                Relatório/lista de imagens suspeitas + pasta de evidências para revisão manual guiada.
+              </td>
+            </tr>
+
+            <tr>
+              <td><b>Inferência em Lote (Imagens)</b><br><span class="tag green">batch_infer_save_positive.py (ajustar)</span></td>
+              <td>
+                Percorre uma pasta de imagens, roda YOLOv11 e <b>salva somente as imagens com detecção</b>,
+                com bounding boxes desenhadas para inspeção.
+              </td>
+              <td>
+                Pasta de imagens + peso do modelo + threshold + tamanho (imgsz).
+              </td>
+              <td>
+                Pasta “positivos” com imagens anotadas (ideal para auditoria rápida e evidência).
+              </td>
+            </tr>
+
+            <tr>
+              <td><b>Inferência em Vídeo</b><br><span class="tag orange">video_infer_export.py (ajustar)</span></td>
+              <td>
+                Executa inferência frame a frame em vídeos reais (cenário de rua), salvando vídeo de saída com predições.
+                Usado para validar comportamento em campo (sombra, pintura, movimento, veículos).
+              </td>
+              <td>
+                Arquivo de vídeo + peso do modelo + threshold + parâmetros de render.
+              </td>
+              <td>
+                Vídeo de saída com detecções + base para análise de falhas contextuais.
+              </td>
+            </tr>
+
+            <tr>
+              <td><b>Separação de Classes do Dataset</b><br><span class="tag blue">split_dataset_by_classes.py (ajustar)</span></td>
+              <td>
+                A partir de um dataset mestre, separa e gera datasets por domínio (ex.: Pavimento vs Zeladoria),
+                filtrando labels, reorganizando estrutura e (quando necessário) remapeando IDs de classes.
+              </td>
+              <td>
+                Dataset mestre (imagens/labels) + lista de classes alvo + config de saída.
+              </td>
+              <td>
+                Pastas prontas train/val/test por domínio + YAML(s) consistentes por modelo.
+              </td>
+            </tr>
+
+            <tr>
+              <td><b>Configuração de Treino YOLO11</b><br><span class="tag yellow">train_config_notes.md / train_cmds (ajustar)</span></td>
+              <td>
+                Padroniza a forma de treinar (batch, epochs, imgsz, augmentations como mosaic/mixup/copy_paste),
+                com foco em repetibilidade e comparação entre ciclos.
+              </td>
+              <td>
+                data.yaml + peso base + parâmetros definidos no ciclo.
+              </td>
+              <td>
+                Pesos best.pt + logs + métricas para relatório do PMO.
+              </td>
+            </tr>
+
+            <tr>
+              <td><b>Relatórios no Padrão Pentágono</b><br><span class="tag blue">report_templates.html (ajustar)</span></td>
+              <td>
+                Templates para relatar treinos/validações com linguagem executiva (status, riscos, recomendações),
+                e estrutura técnica (diagnóstico, evidências, próximos passos).
+              </td>
+              <td>
+                Métricas + achados de auditoria + evidências (imagens/vídeos).
+              </td>
+              <td>
+                Relatórios padronizados prontos para envio interno/cliente.
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <b>Observação:</b> a estratégia de scripts prioriza “automatizar o trabalho repetitivo” (triagem/auditoria),
+        deixando a decisão final para revisão humana quando houver ambiguidade.
+      </div>
+    </section>
+
+    <!-- AUDITORIA DETALHADA -->
+    <section class="card">
+      <h2>🔎 Auditoria de Dataset — Processo, Critérios e Resultados</h2>
+      <p class="muted">
+        A auditoria foi aplicada para encontrar “falsos negativos de anotação” e aumentar a confiabilidade do dataset
+        sem adicionar ruído (rótulos forçados).
+      </p>
+
+      <div class="section">
+        <h3>Como a auditoria funciona</h3>
+        <ul class="list">
+          <li>O modelo roda inferência sobre o dataset.</li>
+          <li>Quando detecta um objeto e não há rótulo correspondente, a imagem é sinalizada para revisão.</li>
+          <li>O objetivo é encontrar: <b>classes realmente presentes e não rotuladas</b>, ou <b>ambiguidade que deve permanecer sem rótulo</b>.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>Critério de decisão na revisão</h3>
+        <ul class="list">
+          <li><b>Se estiver claro:</b> rotular e melhorar o dataset.</li>
+          <li><b>Se estiver ambíguo:</b> manter sem rótulo (evita ensinar o modelo errado).</li>
+          <li><b>Se for confusão do modelo:</b> transformar em ação de dataset (hard negatives / coleta dirigida).</li>
+        </ul>
+      </div>
+
+      <div class="callout">
+        <b>Resultado observado:</b> foram encontradas imagens sinalizadas como falso negativo; muitas eram ambíguas e foram mantidas sem rótulo por decisão consciente.
+        <div class="small">Isso fortalece o limite de decisão do modelo e reduz “alucinação” em produção.</div>
+      </div>
+    </section>
+
+    <!-- VALIDAÇÃO E ACHADOS -->
+    <section class="card">
+      <h2>🧪 Validação (Imagens + Vídeos) — Achados e Interpretação</h2>
+      <p class="muted">
+        A validação foi feita com evidências visuais para confirmar comportamento em cenários reais e mapear gaps de dataset.
+      </p>
+
+      <div class="section">
+        <h3>Achados principais</h3>
+        <ul class="list">
+          <li><b>PV × roda de caminhão:</b> confusão pontual em padrões circulares e contrastes específicos.</li>
+          <li><b>Remendo × sombra de árvore:</b> erro típico quando não há diversidade de iluminação no dataset.</li>
+          <li><b>PV × pintura de chão:</b> ocorre principalmente em confiança baixa (~0.4), sugerindo falta de hard negatives.</li>
+          <li><b>Buracos com água:</b> necessidade explícita de reforço de dataset em pavimento molhado/chuva.</li>
+        </ul>
+      </div>
+
+      <div class="callout">
+        <b>Leitura técnica:</b> estes erros são principalmente <b>dataset-driven</b>. A mitigação mais eficiente é adicionar exemplos direcionados e negativos difíceis.
+      </div>
+    </section>
+
+    <!-- ROBOFLOW -->
+    <section class="card">
+      <h2>🎓 Roboflow — Organização para Uso do Estagiário (Operação Segura)</h2>
+      <p class="muted">
+        Foi organizada uma estrutura no Roboflow visando permitir que um estagiário consiga produzir anotação
+        com segurança, sem risco de quebrar o padrão do projeto.
+      </p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+        <span class="tag green">Onboarding</span>
+        <span class="tag blue">Segurança</span>
+        <span class="tag orange">Padronização</span>
+      </div>
+
+      <div class="section">
+        <h3>Estratégia de organização</h3>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:22%;">Camada</th>
+                <th style="width:40%;">Como foi organizado</th>
+                <th style="width:38%;">Por que isso reduz risco</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Projetos separados</b></td>
+                <td>Zeladoria e Pavimento em projetos/versões distintas.</td>
+                <td>Evita mistura de classes e contaminação de dataset entre domínios.</td>
+              </tr>
+              <tr>
+                <td><b>Classes travadas</b></td>
+                <td>Estagiário rotula, mas não cria/renomeia classes.</td>
+                <td>Evita despadronização e quebra de mapeamento do YAML/IDs.</td>
+              </tr>
+              <tr>
+                <td><b>Guia obrigatório</b></td>
+                <td>Guia de rotulagem como referência única (anti-ruído).</td>
+                <td>Reduz variação entre anotadores e melhora consistência.</td>
+              </tr>
+              <tr>
+                <td><b>Exportações versionadas</b></td>
+                <td>Exportar sempre com versão, data e responsável.</td>
+                <td>Garante rastreabilidade e rollback rápido se necessário.</td>
+              </tr>
+              <tr>
+                <td><b>Checklist de revisão</b></td>
+                <td>Amostragem diária/por lote para revisão antes de “valer”.</td>
+                <td>Captura erros cedo e evita escalar ruído para treino.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout">
+        <b>Resultado:</b> qualquer novo membro entra, produz, e não compromete o padrão — com governança e rastreabilidade.
+      </div>
+    </section>
+
+    <!-- PRÓXIMOS PASSOS -->
+    <section class="card">
+      <h2>🧩 Próximos Passos (Plano Objetivo)</h2>
+      <p class="muted">Ações recomendadas com foco em impacto direto nos erros observados.</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:12%;">Prior.</th>
+              <th style="width:30%;">Ação</th>
+              <th style="width:33%;">Como executar</th>
+              <th style="width:25%;">Resultado esperado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag red">Alta</span></td>
+              <td><b>Adicionar buracos com água</b></td>
+              <td>Coletar amostras reais em chuva/piso molhado e rotular apenas quando evidente.</td>
+              <td>Melhora recall e reduz falhas em cenário crítico.</td>
+            </tr>
+            <tr>
+              <td><span class="tag orange">Alta</span></td>
+              <td><b>Remendo × sombra</b></td>
+              <td>Adicionar exemplos com sombra forte e horários diversos + negativos difíceis.</td>
+              <td>Reduz falso positivo de remendo em sombra.</td>
+            </tr>
+            <tr>
+              <td><span class="tag orange">Média</span></td>
+              <td><b>Hard negatives de pintura</b></td>
+              <td>Adicionar faixas, marcações, pinturas e padrões circulares como negativos.</td>
+              <td>Reduz PV “viajado” em pintura e artefatos.</td>
+            </tr>
+            <tr>
+              <td><span class="tag blue">Média</span></td>
+              <td><b>Validação adversa fixa</b></td>
+              <td>Criar subset “difícil” (noite/chuva/sombra/movimento) e validar toda versão.</td>
+              <td>Métrica mais realista e evolução previsível.</td>
+            </tr>
+            <tr>
+              <td><span class="tag green">Baixa</span></td>
+              <td><b>Fine-tuning curto</b></td>
+              <td>Após reforço do dataset, rodar ajuste fino com epochs menores e validação por vídeo.</td>
+              <td>Ganho rápido sem desestabilizar o modelo.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CONCLUSÃO -->
+    <section class="card">
+      <h2>✅ Conclusão</h2>
+      <p class="muted">
+        O projeto alcançou <b>maturidade estrutural</b> neste ciclo: separação por domínio, governança via PMO,
+        padronização de rotulagem e automações de auditoria/validação. Os pontos de atenção atuais são
+        <b>claros e tratáveis</b> principalmente por reforço de dataset direcionado.
+      </p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <span class="badge green"><b>Status</b> 🟢 Evolução consistente</span>
+        <span class="badge yellow"><b>Risco</b> 🟡 Mitigável</span>
+        <span class="badge blue"><b>Próximo foco</b> Dataset adverso</span>
+      </div>
+
+      <div class="footer">
+        <div class="hr"></div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; margin-top:10px;">
+          <div>© Pentágono Engenharia • PavScan / Zeladoria Urbana</div>
+          <div>Gerado por: <b>Milena Castilho</b> • Jan/2026</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
