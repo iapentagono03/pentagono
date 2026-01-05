@@ -3,60 +3,54 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Status Report Completo — Pentágono Engenharia | PavScan / Zeladoria</title>
+  <title>Status Report Completo — Pentágono Engenharia / Zeladoria</title>
+
   <style>
-    :root{
-      --penta:#f3901d;
-      --bg:#0b0f14;
-      --panel:#0f1621;
-      --card:#111b28;
-      --card2:#0e1724;
-      --text:#e8eef6;
-      --muted:#a9b4c2;
-      --line:#223042;
-      --good:#2ecc71;
-      --warn:#f1c40f;
-      --bad:#e74c3c;
-      --info:#4aa3ff;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 18px;
-      --radius2: 14px;
+    :root {
+      --bg: #f9fafb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --accent: #f3901d;
+
+      --good:#16a34a;
+      --warn:#d97706;
+      --bad:#dc2626;
+      --info:#2563eb;
+
+      --radius: 14px;
+      --radius2: 12px;
+      --shadow: 0 10px 25px rgba(0,0,0,.06);
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
+
     body{
       margin:0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
-      background:
-        radial-gradient(1200px 600px at 10% 0%, rgba(243,144,29,.18), transparent 55%),
-        radial-gradient(900px 600px at 100% 15%, rgba(74,163,255,.12), transparent 55%),
-        linear-gradient(180deg, #06090d 0%, var(--bg) 55%, #05070a 100%);
-      color:var(--text);
-      line-height:1.48;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Ubuntu, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
     }
 
     .container{
-      max-width:1180px;
+      max-width:1100px;
       margin:0 auto;
-      padding:26px 18px 56px;
+      padding:60px 20px 80px;
     }
 
+    /* HEADER (mantém a estrutura original, só muda o visual) */
     .header{
-      background: linear-gradient(135deg, rgba(243,144,29,.18), rgba(17,27,40,.65));
-      border:1px solid rgba(243,144,29,.25);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding:22px 22px 18px;
+      padding: 28px;
       box-shadow: var(--shadow);
-      position:relative;
+      margin-bottom: 22px;
+      position: relative;
       overflow:hidden;
-    }
-
-    .header:before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: radial-gradient(600px 220px at 15% 0%, rgba(243,144,29,.22), transparent 60%);
-      pointer-events:none;
     }
 
     .toprow{
@@ -65,8 +59,6 @@
       align-items:flex-start;
       justify-content:space-between;
       flex-wrap:wrap;
-      position:relative;
-      z-index:1;
     }
 
     .brand{
@@ -78,25 +70,24 @@
 
     .logo{
       width:48px;height:48px;
-      border-radius:14px;
-      background: linear-gradient(135deg, rgba(243,144,29,1), rgba(243,144,29,.35));
-      box-shadow: 0 8px 22px rgba(243,144,29,.25);
+      border-radius: 14px;
+      background: var(--accent);
       display:grid;
       place-items:center;
-      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 10px 20px rgba(243,144,29,.18);
+      border:1px solid rgba(17,24,39,.08);
       flex:0 0 auto;
     }
-    .logo svg{opacity:.95}
 
     .titleblock h1{
       margin:0;
-      font-size:18px;
-      letter-spacing:.2px;
+      font-size: 18px;
+      letter-spacing: .2px;
     }
     .titleblock p{
       margin:4px 0 0;
-      color:var(--muted);
-      font-size:13px;
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .meta{
@@ -109,55 +100,55 @@
     }
 
     .pill{
-      background: rgba(15,22,33,.7);
-      border:1px solid rgba(255,255,255,.10);
+      background: #fff;
+      border: 1px solid var(--border);
       border-radius: 999px;
-      padding:8px 12px;
-      font-size:12px;
-      color:var(--muted);
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--muted);
       display:flex;
       gap:8px;
       align-items:center;
-      box-shadow: 0 8px 18px rgba(0,0,0,.18);
+      box-shadow: 0 6px 14px rgba(0,0,0,.04);
     }
-    .pill b{color:var(--text); font-weight:600}
+    .pill b{ color: var(--text); font-weight: 650; }
 
     .dot{
       width:9px;height:9px;border-radius:50%;
       background: var(--good);
-      box-shadow: 0 0 0 4px rgba(46,204,113,.12);
+      box-shadow: 0 0 0 4px rgba(22,163,74,.10);
       flex:0 0 auto;
     }
-    .dot.warn{ background:var(--warn); box-shadow:0 0 0 4px rgba(241,196,15,.12); }
-    .dot.bad{ background:var(--bad); box-shadow:0 0 0 4px rgba(231,76,60,.12); }
+    .dot.warn{ background: var(--warn); box-shadow: 0 0 0 4px rgba(217,119,6,.10); }
+    .dot.bad{ background: var(--bad); box-shadow: 0 0 0 4px rgba(220,38,38,.10); }
 
     .btnprint{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(15,22,33,.6);
+      border: 1px solid var(--border);
+      background: #fff;
       color: var(--text);
       border-radius: 999px;
-      padding:10px 12px;
-      font-size:12px;
-      cursor:pointer;
+      padding: 10px 12px;
+      font-size: 12px;
+      cursor: pointer;
       display:inline-flex;
       gap:8px;
       align-items:center;
     }
-    .btnprint:hover{ border-color: rgba(243,144,29,.35); }
+    .btnprint:hover{ border-color: rgba(243,144,29,.45); }
 
     .subtitle{
-      margin:16px 0 0;
-      color:var(--muted);
-      position:relative;
-      z-index:1;
-      font-size:13px;
+      margin:14px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 980px;
     }
 
+    /* GRID / CARDS */
     .grid{
       display:grid;
       grid-template-columns: 1.25fr .75fr;
       gap:14px;
-      margin-top:14px;
+      margin-top: 14px;
     }
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
@@ -165,197 +156,184 @@
     }
 
     .card{
-      background: linear-gradient(180deg, rgba(17,27,40,.95), rgba(14,23,36,.92));
-      border:1px solid rgba(255,255,255,.10);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding:18px;
+      padding: 26px;
     }
+
     .card h2{
-      margin:0 0 10px;
-      font-size:16px;
-      letter-spacing:.2px;
+      margin: 0 0 10px;
+      font-size: 18px;
       display:flex;
       align-items:center;
       gap:10px;
       flex-wrap:wrap;
     }
     .card h3{
-      margin:18px 0 10px;
-      font-size:14px;
-      letter-spacing:.2px;
+      margin: 18px 0 10px;
+      font-size: 15px;
       color: var(--text);
     }
+
     .muted{
-      color:var(--muted);
-      font-size:13px;
+      color: var(--muted);
+      font-size: 14px;
       margin:0;
     }
 
-    .badge{
+    /* BADGES / TAGS */
+    .badge, .tag{
       display:inline-flex;
       align-items:center;
       gap:8px;
       font-size:12px;
       padding:7px 10px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(11,15,20,.35);
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
       color: var(--muted);
-      white-space:nowrap;
+      white-space: nowrap;
     }
-    .badge b{color:var(--text)}
-    .badge.green{ border-color: rgba(46,204,113,.30); background: rgba(46,204,113,.10); }
-    .badge.yellow{ border-color: rgba(241,196,15,.30); background: rgba(241,196,15,.10); }
-    .badge.red{ border-color: rgba(231,76,60,.30); background: rgba(231,76,60,.10); }
-    .badge.blue{ border-color: rgba(74,163,255,.30); background: rgba(74,163,255,.10); }
+    .badge b{ color: var(--text); }
 
+    .badge.green{ border-color: rgba(22,163,74,.25); background: rgba(22,163,74,.08); }
+    .badge.yellow{ border-color: rgba(217,119,6,.25); background: rgba(217,119,6,.08); }
+    .badge.red{ border-color: rgba(220,38,38,.25); background: rgba(220,38,38,.08); }
+    .badge.blue{ border-color: rgba(37,99,235,.25); background: rgba(37,99,235,.08); }
+
+    .tag.orange{ border-color: rgba(243,144,29,.30); background: rgba(243,144,29,.10); }
+    .tag.green{ border-color: rgba(22,163,74,.25); background: rgba(22,163,74,.08); }
+    .tag.yellow{ border-color: rgba(217,119,6,.25); background: rgba(217,119,6,.08); }
+    .tag.red{ border-color: rgba(220,38,38,.25); background: rgba(220,38,38,.08); }
+    .tag.blue{ border-color: rgba(37,99,235,.25); background: rgba(37,99,235,.08); }
+
+    /* KPIS */
     .kpis{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap:10px;
-      margin-top:10px;
+      margin-top: 10px;
     }
     @media (max-width: 600px){
       .kpis{ grid-template-columns: 1fr; }
     }
 
     .kpi{
-      background: rgba(6,9,13,.45);
-      border:1px solid rgba(255,255,255,.08);
+      background: #fff;
+      border: 1px solid var(--border);
       border-radius: var(--radius2);
-      padding:12px;
+      padding: 12px;
     }
     .kpi .label{
-      color:var(--muted);
-      font-size:12px;
-      margin-bottom:6px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
     }
     .kpi .value{
-      font-size:14px;
-      font-weight:700;
-      letter-spacing:.2px;
-      color:var(--text);
+      font-size: 14px;
+      font-weight: 750;
+      color: var(--text);
     }
 
+    /* SECTIONS + LISTS */
     .section{
-      margin-top:14px;
-      padding-top:14px;
-      border-top: 1px dashed rgba(255,255,255,.12);
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
     }
 
     .list{
       margin:8px 0 0;
       padding-left: 18px;
       color: var(--muted);
-      font-size:13px;
+      font-size: 14px;
     }
     .list li{ margin:6px 0; }
-    .list li b{ color: var(--text); font-weight:600; }
+    .list li b{ color: var(--text); font-weight: 650; }
 
+    /* CALLOUT */
     .callout{
-      margin-top:12px;
-      padding:12px 12px;
+      margin-top: 14px;
+      padding: 14px;
       border-radius: var(--radius2);
-      border:1px solid rgba(243,144,29,.28);
-      background: linear-gradient(180deg, rgba(243,144,29,.12), rgba(15,22,33,.35));
+      border: 1px solid rgba(243,144,29,.35);
+      background: #fff7ed;
       color: var(--text);
-      font-size:13px;
+      font-size: 14px;
     }
     .callout .small{
       color: var(--muted);
-      margin-top:6px;
-      font-size:12px;
+      margin-top: 6px;
+      font-size: 12px;
     }
 
+    /* TABLE */
     .tablewrap{
       overflow:auto;
       border-radius: var(--radius2);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(6,9,13,.35);
-      margin-top:10px;
+      border:1px solid var(--border);
+      background: #fff;
+      margin-top: 10px;
     }
     table{
       width:100%;
-      border-collapse:collapse;
+      border-collapse: collapse;
       min-width: 860px;
     }
     th, td{
-      padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,.08);
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--border);
       text-align:left;
-      font-size:12.5px;
+      font-size: 13px;
       color: var(--muted);
       vertical-align: top;
     }
     th{
-      position:sticky;
-      top:0;
-      background: rgba(17,27,40,.95);
+      position: sticky;
+      top: 0;
+      background: #f3f4f6;
       color: var(--text);
-      font-weight:700;
-      letter-spacing:.2px;
-      z-index:1;
+      font-weight: 750;
+      z-index: 1;
     }
     td b{ color: var(--text); }
-
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:6px 10px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(15,22,33,.55);
-      font-size:12px;
-      color: var(--muted);
-      white-space:nowrap;
-    }
-    .tag.orange{ border-color: rgba(243,144,29,.25); background: rgba(243,144,29,.10); }
-    .tag.green{ border-color: rgba(46,204,113,.25); background: rgba(46,204,113,.10); }
-    .tag.yellow{ border-color: rgba(241,196,15,.25); background: rgba(241,196,15,.10); }
-    .tag.red{ border-color: rgba(231,76,60,.25); background: rgba(231,76,60,.10); }
-    .tag.blue{ border-color: rgba(74,163,255,.25); background: rgba(74,163,255,.10); }
 
     .hr{
       margin:14px 0 0;
       height:1px;
-      background: linear-gradient(90deg, transparent, rgba(243,144,29,.35), rgba(255,255,255,.10), transparent);
+      background: linear-gradient(90deg, transparent, rgba(243,144,29,.55), rgba(17,24,39,.12), transparent);
     }
 
     .footer{
       margin-top:16px;
       color: var(--muted);
-      font-size:12px;
-      opacity:.95;
+      font-size: 12px;
+      opacity: .95;
     }
 
     .signature{
-      margin-top:10px;
+      margin-top: 10px;
       display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
     }
     .sig{
-      font-size:12px;
+      font-size: 12px;
       color: var(--muted);
     }
     .sig b{ color: var(--text); }
 
     @media print{
       body{ background:#fff; color:#111; }
-      .header,.card{ box-shadow:none; }
       .btnprint{ display:none; }
       .container{ max-width:none; padding:0; }
-      .card{ border:1px solid #ddd; }
-      .badge,.tag{ border:1px solid #ddd; background:#f7f7f7; color:#333; }
-      .muted,.sig,td,th{ color:#333; }
-      .logo{ box-shadow:none; }
-      .tablewrap{ border:1px solid #ddd; }
-      th{ background:#f2f2f2; color:#111; }
-      .callout{ background:#fff7ef; border-color:#f3901d; }
+      .header, .card{ box-shadow:none; }
+      .badge, .tag, .pill{ box-shadow:none; }
+      th{ position: static; }
     }
   </style>
 </head>
@@ -370,12 +348,12 @@
           <div class="logo" aria-label="Pentágono">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2.5l8.5 6.2-3.3 10.1H6.8L3.5 8.7 12 2.5z" stroke="white" stroke-width="1.6" opacity="0.95"/>
-              <path d="M12 6.2l4.8 3.5-1.9 5.8H9.1L7.2 9.7 12 6.2z" fill="white" opacity="0.18"/>
+              <path d="M12 6.2l4.8 3.5-1.9 5.8H9.1L7.2 9.7 12 6.2z" fill="white" opacity="0.22"/>
             </svg>
           </div>
           <div class="titleblock">
             <h1>📊 Status Report Completo — Projeto Visão Computacional</h1>
-            <p><b>Pentágono Engenharia</b> • PavScan / Zeladoria Urbana • Documento técnico-executivo</p>
+            <p><b>Pentágono Engenharia</b> • Zeladoria Urbana • Documento técnico-executivo</p>
           </div>
         </div>
 
@@ -916,7 +894,7 @@
       <div class="footer">
         <div class="hr"></div>
         <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; margin-top:10px;">
-          <div>© Pentágono Engenharia • PavScan / Zeladoria Urbana</div>
+          <div>© Pentágono Engenharia/ Zeladoria Urbana</div>
           <div>Gerado por: <b>Milena Castilho</b> • Jan/2026</div>
         </div>
       </div>
