@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guia de Rotulagem — YOLOv11 | Boas Práticas de Bounding Boxes</title>
+
+  <style>
+    :root{
+      --bg:#f9fafb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --penta:#f3901d;
+
+      --good:#16a34a;
+      --warn:#d97706;
+      --bad:#dc2626;
+      --info:#2563eb;
+
+      --radius:14px;
+      --radius2:12px;
+      --shadow:0 10px 25px rgba(0,0,0,.06);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
+        Roboto,Ubuntu,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    .container{
+      max-width:1100px;
+      margin:auto;
+      padding:60px 20px 80px;
+    }
+
+    /* HEADER */
+    .header{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:32px;
+      box-shadow:var(--shadow);
+    }
+
+    h1,h2,h3{
+      margin:0 0 12px;
+      letter-spacing:.2px;
+    }
+    h1{font-size:28px}
+    h2{font-size:22px}
+    h3{font-size:18px}
+
+    .muted{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    /* CARDS */
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:32px;
+    }
+
+    .section{
+      margin-top:28px;
+      padding-top:28px;
+      border-top:1px dashed var(--border);
+    }
+
+    ul{
+      margin:12px 0 0;
+      padding-left:20px;
+      font-size:15px;
+      color:var(--muted);
+    }
+
+    li{margin:8px 0}
+    li b{color:var(--text)}
+
+    /* TAGS */
+    .tag{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:13px;
+      margin:4px 8px 0 0;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--muted);
+    }
+
+    .tag.green{border-color:rgba(22,163,74,.35);background:rgba(22,163,74,.08)}
+    .tag.orange{border-color:rgba(243,144,29,.45);background:rgba(243,144,29,.12)}
+    .tag.red{border-color:rgba(220,38,38,.35);background:rgba(220,38,38,.08)}
+    .tag.blue{border-color:rgba(37,99,235,.35);background:rgba(37,99,235,.08)}
+
+    /* CALLOUT */
+    .callout{
+      margin-top:18px;
+      padding:18px;
+      border-radius:var(--radius2);
+      border-left:4px solid var(--penta);
+      background:#fff7ed;
+      font-size:15px;
+    }
+
+    /* TABLE */
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:18px;
+      font-size:14px;
+    }
+
+    th,td{
+      padding:14px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      vertical-align:top;
+    }
+
+    th{
+      background:#f3f4f6;
+      color:var(--text);
+      font-weight:700;
+    }
+
+    td{color:var(--muted)}
+
+    /* FOOTER */
+    .footer{
+      margin-top:48px;
+      font-size:14px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      border-top:1px solid var(--border);
+      padding-top:24px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <section class="header">
+    <h1>📘 Guia de Rotulagem — YOLOv11</h1>
+    <p class="muted">
+      Boas práticas para <b>bounding boxes</b> • Documento genérico e reutilizável<br>
+      Objetivo: maximizar <b>precisão, recall e generalização</b> do modelo
+    </p>
+  </section>
+
+  <!-- PRINCÍPIOS -->
+  <section class="card">
+    <h2>🧠 Princípios Fundamentais</h2>
+
+    <span class="tag green">Qualidade &gt; Quantidade</span>
+    <span class="tag blue">Consistência</span>
+    <span class="tag orange">Anti-ruído</span>
+
+    <ul>
+      <li>O modelo aprende <b>exatamente o que você rotula</b>.</li>
+      <li>Rótulos ruins ensinam o modelo errado — mesmo em grande volume.</li>
+      <li><b>Se você tem dúvida se aquilo é a classe, não rotule.</b></li>
+    </ul>
+
+    <div class="callout">
+      <b>Regra de ouro:</b><br>
+      Se dois anotadores não chegariam à mesma conclusão olhando a imagem, o rótulo é ruim.
+    </div>
+  </section>
+
+  <!-- BOUNDING BOX -->
+  <section class="card">
+    <h2>📦 Bounding Box — Como Desenhar Corretamente</h2>
+
+    <h3>✅ Caixa ideal</h3>
+    <ul>
+      <li>Envolve <b>apenas o objeto</b>, sem sobrar fundo desnecessário.</li>
+      <li>Toca o objeto nos limites <b>sem cortar partes importantes</b>.</li>
+      <li>Mantém proporção coerente com o objeto real.</li>
+    </ul>
+
+    <h3>❌ Erros comuns</h3>
+    <ul>
+      <li>Caixa grande demais (“pegando chão, céu, sombra”).</li>
+      <li>Caixa cortando parte relevante do objeto.</li>
+      <li>Caixas inconsistentes para o mesmo tipo de objeto.</li>
+    </ul>
+
+    <div class="callout">
+      <b>Impacto direto:</b> caixas folgadas aumentam falso positivo; caixas cortadas reduzem recall.
+    </div>
+  </section>
+
+  <!-- CASOS DIFÍCEIS -->
+  <section class="card">
+    <h2>⚠️ Casos Difíceis — Como Decidir</h2>
+
+    <table>
+      <tr>
+        <th>Cenário</th>
+        <th>Boa prática</th>
+        <th>Motivo</th>
+      </tr>
+      <tr>
+        <td>Objeto parcialmente visível</td>
+        <td>Rotular apenas se a identidade estiver clara</td>
+        <td>Evita ensinar padrões ambíguos</td>
+      </tr>
+      <tr>
+        <td>Sombra / reflexo</td>
+        <td>Não rotular sombra como objeto</td>
+        <td>Sombra não é classe</td>
+      </tr>
+      <tr>
+        <td>Objeto muito distante</td>
+        <td>Evitar rotular se virar “pixel”</td>
+        <td>Ruído visual</td>
+      </tr>
+      <tr>
+        <td>Blur / movimento</td>
+        <td>Rotular só se ainda for reconhecível</td>
+        <td>Evita confusão de forma</td>
+      </tr>
+      <tr>
+        <td>Objeto coberto por água/lama</td>
+        <td>Rotular apenas se o padrão for inequívoco</td>
+        <td>Ambiguidade gera erro</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- MÚLTIPLOS OBJETOS -->
+  <section class="card">
+    <h2>🔢 Múltiplos Objetos e Sobreposição</h2>
+
+    <ul>
+      <li>Cada objeto deve ter <b>sua própria bounding box</b>.</li>
+      <li>Sobreposição é permitida se os objetos forem distintos.</li>
+      <li>Não agrupar múltiplos objetos em uma única caixa.</li>
+    </ul>
+
+    <div class="callout">
+      <b>Exemplo:</b> dois buracos próximos → duas caixas, nunca uma só.
+    </div>
+  </section>
+
+  <!-- CONSISTÊNCIA -->
+  <section class="card">
+    <h2>📏 Consistência Entre Anotadores</h2>
+
+    <ul>
+      <li>Use sempre o <b>mesmo critério</b> para a mesma classe.</li>
+      <li>Evite “interpretar demais” a imagem.</li>
+      <li>Siga o guia — não invente regras novas.</li>
+    </ul>
+
+    <div class="callout">
+      <b>YOLO aprende padrão estatístico.</b><br>
+      Se cada pessoa rotula de um jeito, o modelo aprende confusão.
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section class="card">
+    <h2>✅ Checklist Final Antes de Exportar</h2>
+
+    <ul>
+      <li>☑ Bounding boxes estão justas?</li>
+      <li>☑ Não há rótulos em objetos duvidosos?</li>
+      <li>☑ Classes estão consistentes?</li>
+      <li>☑ Não há caixas desnecessárias?</li>
+      <li>☑ Dataset reflete o cenário real?</li>
+    </ul>
+
+    <div class="callout">
+      <b>Lembre-se:</b> corrigir rótulo custa minutos. Corrigir modelo ruim custa semanas.
+    </div>
+  </section>
+
+  <!-- CONCLUSÃO -->
+  <section class="card">
+    <h2>🎯 Conclusão</h2>
+    <p class="muted">
+      Um bom modelo YOLOv11 começa com <b>boas bounding boxes</b>.<br>
+      Seguir estas práticas reduz falso positivo, melhora recall e aumenta
+      a confiabilidade do modelo em produção.
+    </p>
+  </section>
+
+  <div class="footer">
+    <div>Guia genérico YOLOv11 • Boas Práticas</div>
+    <div>Documento reutilizável • 2026</div>
+  </div>
+
+</div>
+</body>
+</html>
