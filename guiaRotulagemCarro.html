@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Guia de Boas Práticas — Rotulagem de Carros | Pentágono Engenharia</title>
+
+<style>
+:root {
+  --penta:#f3901d;
+  --bg:#f2f5fa;
+  --card:#ffffff;
+  --text:#0b1220;
+  --muted:#6b7280;
+  --border:#dfe4ef;
+  --radius:20px;
+  --shadow:0 12px 30px rgba(0,0,0,.07);
+
+  --green:#16a34a;
+  --red:#dc2626;
+}
+
+*{box-sizing:border-box}
+
+body {
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+
+.wrap {
+  max-width:1000px;
+  margin:0 auto;
+  padding:30px 20px 80px;
+}
+
+.header {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.header h1 {
+  margin:0 0 6px;
+  font-size:20px;
+}
+
+.header .sub {
+  margin:0;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.navbar {
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.navbar button {
+  flex:1;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#ffffff;
+  cursor:pointer;
+  font-weight:bold;
+  transition:.3s;
+}
+
+.navbar button:hover {
+  border-color:var(--penta);
+  background:rgba(243,144,29,.08);
+}
+
+.slide {
+  display:none;
+}
+
+.slide.active {
+  display:block;
+}
+
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+  margin-bottom:16px;
+}
+
+.card h2 {
+  margin:0 0 10px;
+  font-size:18px;
+}
+
+.callout {
+  border-left:4px solid var(--penta);
+  background:#fafbff;
+  padding:14px;
+  border-radius:var(--radius2);
+  margin-top:12px;
+  font-size:13px;
+}
+
+.rulebox {
+  border:1px dashed var(--penta);
+  background:rgba(243,144,29,.06);
+  border-radius:14px;
+  padding:14px;
+  margin-top:14px;
+}
+
+.badge {
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.badge.green {
+  background:rgba(22,163,74,.1);
+  color:var(--green);
+}
+
+.badge.red {
+  background:rgba(220,38,38,.1);
+  color:var(--red);
+}
+
+ul {
+  margin-top:12px;
+  padding-left:20px;
+}
+
+li {
+  margin-bottom:8px;
+}
+
+.footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:30px;
+}
+
+@media (max-width: 900px) {
+  .navbar {flex-direction:column}
+}
+</style>
+
+<script>
+function mostrarSlide(id) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+</script>
+
+</head>
+
+<body>
+<div class="wrap">
+
+<div class="header">
+  <h1>Guia de Boas Práticas — Rotulagem de Veículos</h1>
+  <p class="sub">
+    Documento de referência para criação de datasets YOLOv11 na área de Zeladoria Urbana
+    com as classes <b>carro_estacionado_irregularmente</b> e <b>carro_abandonado</b>.
+  </p>
+</div>
+
+<div class="navbar">
+  <button onclick="mostrarSlide('intro')">Introdução</button>
+  <button onclick="mostrarSlide('irregular')">Carro Irregular</button>
+  <button onclick="mostrarSlide('abandonado')">Carro Abandonado</button>
+  <button onclick="mostrarSlide('boxes')">Bounding Boxes</button>
+</div>
+
+<!-- Introdução -->
+<div class="card slide active" id="intro">
+  <h2>🎯 Introdução</h2>
+  <p>
+    Este guia foi elaborado para padronizar o processo de anotação de imagens, garantindo
+    que as duas classes sejam usadas de forma clara e repetível por qualquer anotador.
+  </p>
+
+  <div class="rulebox">
+    <b>REGRA DE OURO:</b> Se a imagem for ambígua ou gerar dúvida, <b>NÃO ROTULE</b>.
+  </div>
+
+  <ul>
+    <li>Consistência é mais importante que quantidade.</li>
+    <li>Rótulos corretos produzem melhor aprendizagem.</li>
+    <li>Ruído de anotação prejudica diretamente o mAP.</li>
+  </ul>
+</div>
+
+<!-- Carro Estacionado Irregularmente -->
+<div class="card slide" id="irregular">
+  <h2>🚗 Classe: carro_estacionado_irregularmente</h2>
+
+  <p>
+    Use esta classe apenas para veículos que estão claramente funcionais, mas
+    posicionados em situação proibida do ponto de vista urbano.
+  </p>
+
+  <div class="callout">
+    Esta é uma classe baseada principalmente no <b>CONTEXTO</b>.
+  </div>
+
+  <h3>Quando rotular:</h3>
+  <ul>
+    <li>Carro com roda(s) sobre a calçada</li>
+    <li>Veículo totalmente parado em passeio público</li>
+    <li>Bloqueando rampa de acessibilidade</li>
+    <li>Em frente a faixa de pedestres</li>
+    <li>Obstruindo passagem de pedestres</li>
+  </ul>
+
+  <h3>O que NÃO é essa classe:</h3>
+  <ul>
+    <li>Carros parados corretamente na rua</li>
+    <li>Veículos em movimento</li>
+    <li>Congestionamentos</li>
+    <li>Manobras de estacionamento</li>
+    <li>Carro apenas “próximo” da calçada</li>
+  </ul>
+
+  <div class="badge green">Foco no cenário</div>
+
+  <p>
+    Se você precisar de uma explicação longa para justificar a infração, isso indica
+    que o caso está duvidoso e deve ser tratado como background.
+  </p>
+</div>
+
+<!-- Carro Abandonado -->
+<div class="card slide" id="abandonado">
+  <h2>🏚 Classe: carro_abandonado</h2>
+
+  <p>
+    Esta classe deve ser utilizada quando o veículo apresentar um conjunto de sinais visuais
+    típicos de abandono. O estado físico do objeto é determinante.
+  </p>
+
+  <div class="callout">
+    Classe baseada principalmente na <b>APARÊNCIA</b> e no <b>ESTADO</b> do veículo.
+  </div>
+
+  <h3>Critérios visuais:</h3>
+  <ul>
+    <li>Vidros quebrados</li>
+    <li>Pneus furados ou ausentes</li>
+    <li>Ferrugem acentuada</li>
+    <li>Peças faltando (portas, capô, faróis)</li>
+    <li>Sujeira extrema acumulada</li>
+    <li>Vegetação crescendo ao redor</li>
+    <li>Interior exposto</li>
+  </ul>
+
+  <h3>Recomendação de uso:</h3>
+
+  <div class="rulebox">
+    Rotule como <b>carro_abandonado</b> quando houver pelo menos <span class="emph">DOIS SINAIS FORTES</span> de abandono na mesma imagem.
+  </div>
+
+  <p>
+    Não rotular como abandono casos recentes de pane ou acidente onde o tempo parado
+    não seja evidente.
+  </p>
+
+  <div class="badge red">Estado do objeto tem prioridade</div>
+
+  <p>
+    Mesmo que o carro abandonado esteja em posição irregular, esta classe tem precedência
+    sobre a classe de estacionamento irregular.
+  </p>
+</div>
+
+<!-- Boas práticas de bounding box -->
+<div class="card slide" id="boxes">
+  <h2>📐 Regras de Bounding Boxes</h2>
+
+  <p>
+    Independentemente da classe, o modo de desenhar as caixas deve seguir um padrão técnico único.
+  </p>
+
+  <ul>
+    <li>Use sempre <b>uma caixa por veículo</b></li>
+    <li>Não inclua elementos externos como calçada ou pessoas na box</li>
+    <li>Evite caixas muito justas</li>
+    <li>Inclua o veículo completo sempre que possível</li>
+  </ul>
+
+  <div class="rulebox">
+    <b>Importante:</b> bounding box descreve o OBJETO, não a infração.
+  </div>
+
+  <p>
+    Em cenas com múltiplos carros, rotule apenas os que realmente atenderem
+    aos critérios de cada classe.
+  </p>
+</div>
+
+<!-- Tabela de decisão -->
+<div class="card slide" id="boxes">
+  <h2>🧭 Tabela de Decisão Rápida</h2>
+
+  <ul>
+    <li>Carro funcional sobre a calçada → <b>carro_estacionado_irregularmente</b></li>
+    <li>Carcaça ou deteriorado com sinais de tempo → <b>carro_abandonado</b></li>
+    <li>Carro antigo porém conservado → <b>background</b></li>
+    <li>Dúvida se é funcional ou não → <b>não rotular</b></li>
+  </ul>
+
+  <div class="rulebox">
+    <b>Resumo:</b> CONTEXTO = irregular. VISUAL = abandono.
+  </div>
+</div>
+
+<div class="footer">
+  Pentágono Engenharia · Guia elaborado para treinamento consistente em YOLOv11
+</div>
+
+</div>
+</body>
+</html>
